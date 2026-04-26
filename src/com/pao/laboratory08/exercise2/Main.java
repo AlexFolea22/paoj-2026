@@ -1,21 +1,40 @@
 package com.pao.laboratory08.exercise2;
 
-import java.io.*;
-import java.util.*;
+import com.pao.laboratory08.exercise1.Student;
+
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
-    private static final String FILE_PATH = "src/com/pao/laboratory08/tests/studenti.txt";
-
     public static void main(String[] args) throws Exception {
-        // TODO: Implementează conform Readme.md
-        //
-        // 1. Citește studenții din FILE_PATH cu BufferedReader
-        // 2. Citește pragul de vârstă din stdin cu Scanner
-        // 3. Filtrează studenții cu varsta >= prag
-        // 4. Scrie filtrații în "rezultate.txt" cu BufferedWriter
-        // 5. Afișează sumarul la consolă
+        List<Student> studenti = com.pao.laboratory08.exercise1.Main.citesteStudenti();
+        Scanner scanner = new Scanner(System.in);
+        int prag = scanner.nextInt();
 
-        System.out.println("TODO: implementează exercițiul 2");
+        List<Student> filtrati = new ArrayList<>();
+        for (Student student : studenti) {
+            if (student.getVarsta() >= prag) {
+                filtrati.add(student);
+            }
+        }
+
+        try (BufferedWriter writer = new BufferedWriter(new FileWriter("rezultate.txt"))) {
+            for (Student student : filtrati) {
+                writer.write(student.toString());
+                writer.newLine();
+            }
+        }
+
+        System.out.println("Filtru: varsta >= " + prag);
+        System.out.println("Rezultate: " + filtrati.size() + " studenti");
+        System.out.println();
+        for (Student student : filtrati) {
+            System.out.println(student);
+        }
+        System.out.println();
+        System.out.println("Scris in: rezultate.txt");
     }
 }
-
