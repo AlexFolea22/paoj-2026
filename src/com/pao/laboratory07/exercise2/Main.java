@@ -49,3 +49,69 @@ public class Main {
         System.out.printf("Total platit: %.2f lei\n", sumaStandard + sumaDiscounted);
     }
 }
+
+abstract sealed class Comanda permits ComandaStandard, ComandaRedusa, ComandaGratuita {
+    protected String nume;
+    protected double pret;
+    protected OrderState stare = OrderState.PLACED;
+
+    public Comanda(String nume, double pret) {
+        this.nume = nume;
+        this.pret = pret;
+    }
+
+    public abstract double pretFinal();
+
+    public abstract String descriere();
+}
+
+final class ComandaStandard extends Comanda {
+    public ComandaStandard(String nume, double pret) {
+        super(nume, pret);
+    }
+
+    @Override
+    public double pretFinal() {
+        return pret;
+    }
+
+    @Override
+    public String descriere() {
+        return String.format("STANDARD: %s, pret: %.2f lei [%s]", nume, pretFinal(), stare);
+    }
+}
+
+final class ComandaRedusa extends Comanda {
+    private int discountProcent;
+
+    public ComandaRedusa(String nume, double pret, int discountProcent) {
+        super(nume, pret);
+        this.discountProcent = discountProcent;
+    }
+
+    @Override
+    public double pretFinal() {
+        return pret * (1 - discountProcent / 100.0);
+    }
+
+    @Override
+    public String descriere() {
+        return String.format("DISCOUNTED: %s, pret: %.2f lei (-%d%%) [%s]", nume, pretFinal(), discountProcent, stare);
+    }
+}
+
+final class ComandaGratuita extends Comanda {
+    public ComandaGratuita(String nume) {
+        super(nume, 0);
+    }
+
+    @Override
+    public double pretFinal() {
+        return 0;
+    }
+
+    @Override
+    public String descriere() {
+        return String.format("GIFT: %s, gratuit [%s]", nume, stare);
+    }
+}
